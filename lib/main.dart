@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasky/views/splash_view/splash_view.dart';
+import 'package:tasky/views/auth/login_view.dart';
 
 void main() {
   runApp(Tasky());
@@ -12,8 +12,8 @@ class Tasky extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      routes: {SplashView.routeName: (context) => SplashView()},
-      initialRoute: SplashView.routeName,
+      routes: {LoginView.routeName: (context) => LoginView()},
+      initialRoute: LoginView.routeName,
     );
   }
 }
