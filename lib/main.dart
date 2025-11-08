@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasky/views/auth/login_view.dart';
+import 'package:tasky/views/auth/register_view.dart';
 
 void main() {
   runApp(Tasky());
@@ -12,7 +13,10 @@ class Tasky extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      routes: {LoginView.routeName: (context) => LoginView()},
+      routes: {
+        LoginView.routeName: (context) => LoginView(),
+        RegisterView.routeName: (context) => RegisterView(),
+      },
       initialRoute: LoginView.routeName,
     );
   }

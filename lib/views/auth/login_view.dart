@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:tasky/app_bone/consts.dart';
 import 'package:tasky/app_bone/validator.dart';
+import 'package:tasky/views/auth/register_view.dart';
+import 'package:tasky/views/auth/widgets/custom_buttom_navigator.dart';
+import 'package:tasky/widgets/custom_button.dart';
 import 'package:tasky/widgets/custom_text_field.dart';
 
 class LoginView extends StatefulWidget {
-  static const String routeName = 'tasky';
+  static const String routeName = 'LoginView';
   const LoginView({super.key});
 
   @override
@@ -21,71 +24,52 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          GestureDetector(
-            child: Text.rich(
-              TextSpan(
-                text: "Don't have an account? ",
-                children: [
-                  TextSpan(
-                    text: "Sign up",
-                    style: TextStyle(color: mainColor),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height: 60),
-        ],
+      bottomNavigationBar: CustomBottomNavigatorBar(
+        onTap: () {
+          Navigator.pushReplacementNamed(context, RegisterView.routeName);
+        },
+        firstText: "Don't have an account? ",
+        secondText: "Sign Up",
       ),
       backgroundColor: whiteColor,
-      body: Form(
-        key: key,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            spacing: 10,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 110),
-              Text("Login", style: styleBlack32W700),
-              SizedBox(height: 40),
+      body: SingleChildScrollView(
+        child: Form(
+          key: key,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
+              spacing: 10,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 110),
+                Text("Login", style: styleBlack32W700),
+                SizedBox(height: 40),
 
-              Text("Email", style: styleBlack16W400),
+                Text("Email", style: styleBlack16W400),
 
-              CustomTextForm(
-                controller: emailController,
-                validator: emailValidator,
-                hintText: "enter your email",
-              ),
-              SizedBox(height: 10),
-
-              Text("password", style: styleBlack16W400),
-              CustomTextForm(
-                isPassword: true,
-                controller: passwordController,
-                validator: passwordValidator,
-                hintText: " password",
-              ),
-              SizedBox(height: 50),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  // shape: OutlinedBorder.lerp(a, b, t),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  backgroundColor: mainColor,
-                  minimumSize: Size(double.infinity, 48),
+                CustomTextForm(
+                  controller: emailController,
+                  validator: emailValidator,
+                  hintText: "enter your email",
                 ),
+                SizedBox(height: 10),
 
-                onPressed: () {
-                  if (key.currentState!.validate()) {}
-                },
-                child: Text("Login", style: TextStyle(color: whiteColor)),
-              ),
-            ],
+                Text("password", style: styleBlack16W400),
+                CustomTextForm(
+                  isPassword: true,
+                  controller: passwordController,
+                  validator: passwordValidator,
+                  hintText: " password",
+                ),
+                SizedBox(height: 50),
+                CustomButton(
+                  title: "Login",
+                  onPressed: () {
+                    if (key.currentState!.validate()) {}
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
