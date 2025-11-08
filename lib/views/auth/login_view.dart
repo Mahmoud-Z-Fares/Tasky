@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tasky/app_bone/consts.dart';
 import 'package:tasky/app_bone/validator.dart';
@@ -18,7 +19,7 @@ class _LoginViewState extends State<LoginView> {
   var emailController = TextEditingController();
   var emailValidator = Validator.validateEmail;
   var passwordController = TextEditingController();
-  var passwordValidator = Validator.validatePassword;
+  var passwordValidator = Validator.validateName;
   var key = GlobalKey<FormState>();
 
   @override
@@ -74,5 +75,20 @@ class _LoginViewState extends State<LoginView> {
         ),
       ),
     );
+  }
+
+  Future<void> login(String emailAddress, String password) async {
+    try {
+      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: emailAddress,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        print('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        print('Wrong password provided for that user.');
+      }
+    }
   }
 }
