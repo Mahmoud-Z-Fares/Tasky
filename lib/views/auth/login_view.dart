@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tasky/app_bone/consts.dart';
-import 'package:tasky/app_bone/validator.dart';
+import 'package:tasky/utils/consts.dart';
+import 'package:tasky/utils/validator.dart';
+import 'package:tasky/utils/appdialog.dart';
 import 'package:tasky/views/auth/register_view.dart';
 import 'package:tasky/views/auth/widgets/custom_buttom_navigator.dart';
 import 'package:tasky/widgets/custom_button.dart';
@@ -65,8 +66,21 @@ class _LoginViewState extends State<LoginView> {
                 SizedBox(height: 50),
                 CustomButton(
                   title: "Login",
-                  onPressed: () {
-                    if (key.currentState!.validate()) {}
+                  onPressed: () async {
+                    if (key.currentState!.validate()) {
+                      Appdialog.showLoading(context);
+                      await login(emailController.text, passwordController.text)
+                          .then((_) {
+                            Navigator.pop(context);
+                            Navigator.pushReplacementNamed(
+                              context,
+                              RegisterView.routeName,
+                            );
+                          })
+                          .catchError((error) {
+                            Appdialog.showError(context, error);
+                          });
+                    }
                   },
                 ),
               ],
@@ -83,12 +97,8 @@ class _LoginViewState extends State<LoginView> {
         email: emailAddress,
         password: password,
       );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
-      }
+    } catch (e) {
+      throw ("error from FirebaseAuthException");
     }
   }
 }

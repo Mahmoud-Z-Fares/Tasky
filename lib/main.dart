@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:tasky/firebase_options.dart';
 import 'package:tasky/views/auth/login_view.dart';
 import 'package:tasky/views/auth/register_view.dart';
+import 'package:tasky/views/splash_screen/splash_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,8 +21,9 @@ class Tasky extends StatelessWidget {
       routes: {
         LoginView.routeName: (context) => LoginView(),
         RegisterView.routeName: (context) => RegisterView(),
+        SplashView.routeName: (context) => SplashView(),
       },
-      initialRoute: LoginView.routeName,
+      initialRoute: SplashView.routeName,
     );
   }
 }

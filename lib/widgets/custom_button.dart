@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasky/app_bone/consts.dart';
+import 'package:tasky/utils/consts.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({super.key, this.onPressed, required this.title});

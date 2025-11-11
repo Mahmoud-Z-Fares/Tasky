@@ -1,9 +1,8 @@
-import 'dart:developer';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tasky/app_bone/consts.dart';
-import 'package:tasky/app_bone/validator.dart';
+import 'package:tasky/utils/consts.dart';
+import 'package:tasky/utils/validator.dart';
+import 'package:tasky/utils/appdialog.dart';
 import 'package:tasky/views/auth/login_view.dart';
 import 'package:tasky/views/auth/widgets/custom_buttom_navigator.dart';
 import 'package:tasky/widgets/custom_button.dart';
@@ -91,8 +90,27 @@ class _RegisterViewState extends State<RegisterView> {
                 SizedBox(height: 50),
                 CustomButton(
                   title: "Register",
-                  onPressed: () {
-                    register(emailController.text, passwordController.text);
+                  onPressed: () async {
+                    Appdialog.showLoading(context);
+                    await register(
+                          emailController.text,
+                          passwordController.text,
+                        )
+                        .then((_) {
+                          Navigator.pop(context);
+                          emailController.clear();
+                          passwordController.clear();
+                          userNameController.clear();
+                          confirmPasswordController.clear();
+                          Navigator.pushReplacementNamed(
+                            context,
+                            LoginView.routeName,
+                          );
+                        })
+                        .catchError((e) {
+                          //Navigator.pop(context);
+                          Appdialog.showError(context, e.toString());
+                        });
                   },
                 ),
               ],
@@ -110,14 +128,8 @@ class _RegisterViewState extends State<RegisterView> {
             email: emailAddress,
             password: password,
           );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-      }
     } catch (e) {
-      print(e);
+      throw ("error from FirebaseAuthException");
     }
   }
 }

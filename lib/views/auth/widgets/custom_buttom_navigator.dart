@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasky/app_bone/consts.dart';
+import 'package:tasky/utils/consts.dart';
 
 class CustomBottomNavigatorBar extends StatelessWidget {
   const CustomBottomNavigatorBar({
