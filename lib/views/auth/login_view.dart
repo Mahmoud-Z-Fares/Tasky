@@ -1,10 +1,12 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tasky/utils/consts.dart';
+import 'package:tasky/utils/data_base.dart';
 import 'package:tasky/utils/validator.dart';
 import 'package:tasky/utils/appdialog.dart';
+import 'package:tasky/views/auth/data/fire_base_data_base/data_base_user.dart';
 import 'package:tasky/views/auth/register_view.dart';
 import 'package:tasky/views/auth/widgets/custom_buttom_navigator.dart';
+import 'package:tasky/views/home_view/home_view.dart';
 import 'package:tasky/widgets/custom_button.dart';
 import 'package:tasky/widgets/custom_text_field.dart';
 
@@ -67,20 +69,7 @@ class _LoginViewState extends State<LoginView> {
                 CustomButton(
                   title: "Login",
                   onPressed: () async {
-                    if (key.currentState!.validate()) {
-                      Appdialog.showLoading(context);
-                      await login(emailController.text, passwordController.text)
-                          .then((_) {
-                            Navigator.pop(context);
-                            Navigator.pushReplacementNamed(
-                              context,
-                              RegisterView.routeName,
-                            );
-                          })
-                          .catchError((error) {
-                            Appdialog.showError(context, error);
-                          });
-                    }
+                    await login(emailController.text, passwordController.text);
                   },
                 ),
               ],
@@ -92,13 +81,23 @@ class _LoginViewState extends State<LoginView> {
   }
 
   Future<void> login(String emailAddress, String password) async {
-    try {
-      final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: emailAddress,
-        password: password,
+    Appdialog.showLoading(context);
+
+    if (key.currentState!.validate()) {
+      var result = await DataBaseUserAuth.logingUser(
+        emailAddress: emailController.text,
+        password: passwordController.text,
       );
-    } catch (e) {
-      throw ("error from FirebaseAuthException");
+
+      switch (result) {
+        case DataBaseSuccess<void>():
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, HomeView.routeName);
+          throw UnimplementedError();
+        case DataBaseError<void>():
+          Appdialog.showError(context, result.error);
+          throw UnimplementedError();
+      }
     }
   }
 }

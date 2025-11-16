@@ -5,6 +5,9 @@ const Color whiteColor = Color(0xffffffff);
 const String logoPath = "assets/images/logo.png";
 const String taskIconLogo = "assets/icons/task_icon.png";
 const String yIconLogo = "assets/icons/y_icon.png";
+const String pageOneImage = "assets/images/page1.png";
+const String pageTwoImage = "assets/images/page2.png";
+const String pageThreeImage = "assets/images/page3.png";
 
 const TextStyle styleBlack32W700 = TextStyle(
   color: Colors.black,

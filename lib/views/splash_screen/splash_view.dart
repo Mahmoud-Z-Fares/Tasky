@@ -1,7 +1,7 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/material.dart';
 import 'package:tasky/utils/consts.dart';
-import 'package:tasky/views/auth/login_view.dart';
+import 'package:tasky/views/home_view/home_view.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -17,7 +17,7 @@ class _SplashViewState extends State<SplashView> {
     super.initState();
     Future.delayed(
       Duration(seconds: 5),
-    ).then((value) => Navigator.pushNamed(context, LoginView.routeName));
+    ).then((value) => Navigator.pushNamed(context, HomeView.routeName));
   }
 
   @override

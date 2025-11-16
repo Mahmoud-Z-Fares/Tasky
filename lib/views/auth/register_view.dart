@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:tasky/utils/consts.dart';
+import 'package:tasky/utils/data_base.dart';
 import 'package:tasky/utils/validator.dart';
 import 'package:tasky/utils/appdialog.dart';
+import 'package:tasky/views/auth/data/fire_base_data_base/data_base_user.dart';
+import 'package:tasky/views/auth/data/models/user_model.dart';
 import 'package:tasky/views/auth/login_view.dart';
 import 'package:tasky/views/auth/widgets/custom_buttom_navigator.dart';
 import 'package:tasky/widgets/custom_button.dart';
@@ -91,26 +94,7 @@ class _RegisterViewState extends State<RegisterView> {
                 CustomButton(
                   title: "Register",
                   onPressed: () async {
-                    Appdialog.showLoading(context);
-                    await register(
-                          emailController.text,
-                          passwordController.text,
-                        )
-                        .then((_) {
-                          Navigator.pop(context);
-                          emailController.clear();
-                          passwordController.clear();
-                          userNameController.clear();
-                          confirmPasswordController.clear();
-                          Navigator.pushReplacementNamed(
-                            context,
-                            LoginView.routeName,
-                          );
-                        })
-                        .catchError((e) {
-                          //Navigator.pop(context);
-                          Appdialog.showError(context, e.toString());
-                        });
+                    await register(password: passwordController.text);
                   },
                 ),
               ],
@@ -121,15 +105,30 @@ class _RegisterViewState extends State<RegisterView> {
     );
   }
 
-  Future<void> register(String emailAddress, String password) async {
-    try {
-      final credential = await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-            email: emailAddress,
-            password: password,
-          );
-    } catch (e) {
-      throw ("error from FirebaseAuthException");
+  Future<void> register({required String password}) async {
+    Appdialog.showLoading(context);
+    var result = await DataBaseUserAuth.registerUser(
+      userModel: UserModel(
+        name: userNameController.text,
+        email: emailController.text,
+        uid: FirebaseAuth.instance.currentUser!.uid,
+      ),
+      password: passwordController.text,
+    );
+    switch (result) {
+      case DataBaseSuccess<UserModel>():
+        Navigator.pop(context);
+        emailController.clear();
+        passwordController.clear();
+        userNameController.clear();
+        confirmPasswordController.clear();
+        Navigator.pushReplacementNamed(context, LoginView.routeName);
+
+        throw UnimplementedError();
+      case DataBaseError<UserModel>():
+        //Navigator.pop(context);
+        Appdialog.showError(context, result.error);
+        throw UnimplementedError();
     }
   }
 }
